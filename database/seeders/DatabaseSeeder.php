@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->command->info('✅ Database seeding completed successfully!');
         $this->command->info('');
         $this->command->info('🔑 Login Credentials:');
-        $this->command->info('   Admin: admin@flatmanager.com / password');
+        $this->command->info('   Admin: admin@flatmanager.bd / password');
         $this->command->info('   House Owners: [check UserSeeder output] / password');
         $this->command->info('');
         $this->command->info('📊 Seeded Data Summary:');

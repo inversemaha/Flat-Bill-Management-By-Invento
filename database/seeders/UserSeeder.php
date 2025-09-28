@@ -19,52 +19,52 @@ class UserSeeder extends Seeder
             'email' => 'admin@flatmanager.com',
             'password' => Hash::make('password'),
             'role' => 'admin',
-            'phone' => '+91-9876543210',
-            'address' => 'Admin Office, Tech Park, Bangalore, Karnataka',
+            'phone' => '+880-1712-000000',
+            'address' => 'Admin Office, Gulshan-2, Dhaka-1212, Bangladesh',
             'email_verified_at' => now(),
         ]);
 
         // Create House Owners
         $houseOwners = [
             [
-                'name' => 'Rajesh Kumar',
-                'email' => 'rajesh.kumar@example.com',
+                'name' => 'Abdullah Al Mamun',
+                'email' => 'abdullah.mamun@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'house_owner',
-                'phone' => '+91-9876543211',
-                'address' => '123, MG Road, Bangalore, Karnataka, 560001',
+                'phone' => '+880-1712-111111',
+                'address' => 'House 25, Road 27, Gulshan-1, Dhaka-1212',
             ],
             [
-                'name' => 'Priya Sharma',
-                'email' => 'priya.sharma@example.com',
+                'name' => 'Rashida Khatun',
+                'email' => 'rashida.khatun@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'house_owner',
-                'phone' => '+91-9876543212',
-                'address' => '456, Brigade Road, Bangalore, Karnataka, 560025',
+                'phone' => '+880-1812-222222',
+                'address' => 'Flat 8A, Block C, Bashundhara R/A, Dhaka-1229',
             ],
             [
-                'name' => 'Amit Patel',
-                'email' => 'amit.patel@example.com',
+                'name' => 'Mohammad Hasan',
+                'email' => 'mohammad.hasan@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'house_owner',
-                'phone' => '+91-9876543213',
-                'address' => '789, Koramangala, Bangalore, Karnataka, 560034',
+                'phone' => '+880-1912-333333',
+                'address' => 'House 45, Road 32, Dhanmondi, Dhaka-1205',
             ],
             [
-                'name' => 'Sunita Reddy',
-                'email' => 'sunita.reddy@example.com',
+                'name' => 'Fatema Begum',
+                'email' => 'fatema.begum@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'house_owner',
-                'phone' => '+91-9876543214',
-                'address' => '321, Indiranagar, Bangalore, Karnataka, 560038',
+                'phone' => '+880-1612-444444',
+                'address' => 'House 12, Road 11, Banani, Dhaka-1213',
             ],
             [
-                'name' => 'Vikram Singh',
-                'email' => 'vikram.singh@example.com',
+                'name' => 'Mizanur Rahman',
+                'email' => 'mizan.rahman@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'house_owner',
-                'phone' => '+91-9876543215',
-                'address' => '654, Whitefield, Bangalore, Karnataka, 560066',
+                'phone' => '+880-1512-555555',
+                'address' => 'House 88, Sector 11, Uttara, Dhaka-1230',
             ],
         ];
 
@@ -75,7 +75,7 @@ class UserSeeder extends Seeder
         }
 
         $this->command->info('Users seeded successfully!');
-        $this->command->info('Admin credentials: admin@flatmanager.com / password');
+        $this->command->info('Admin credentials: admin@flatmanager.bd / password');
         $this->command->info('House Owner credentials: [any_house_owner_email] / password');
     }
 }

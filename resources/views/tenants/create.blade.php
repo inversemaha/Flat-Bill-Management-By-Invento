@@ -22,7 +22,7 @@
 </div>
 <!-- Breadcrumb End -->
 
-<form method="POST" action="{{ route('tenants.store') }}">
+<form method="POST" action="{{ route('tenants.store') }}" enctype="multipart/form-data">
     @csrf
 
     <!-- Personal Information -->
@@ -93,8 +93,79 @@
                     @enderror
                 </div>
 
-                <!-- Flat Selection -->
+                <!-- Date of Birth -->
                 <div class="w-full xl:w-1/2">
+                    <label class="mb-2.5 block text-black dark:text-white">
+                        Date of Birth <span class="text-meta-1">*</span>
+                    </label>
+                    <input
+                        type="date"
+                        name="date_of_birth"
+                        id="date_of_birth"
+                        value="{{ old('date_of_birth') }}"
+                        required
+                        class="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
+                    @error('date_of_birth')
+                        <p class="text-meta-1 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="mb-4.5 flex flex-col gap-6 xl:flex-row">
+                <!-- Identification Type -->
+                <div class="w-full xl:w-1/2">
+                    <label class="mb-2.5 block text-black dark:text-white">
+                        ID Type <span class="text-meta-1">*</span>
+                    </label>
+                    <div class="relative z-20 bg-transparent">
+                        <select
+                            name="identification_type"
+                            id="identification_type"
+                            required
+                            class="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary text-black dark:text-white"
+                        >
+                            <option value="" class="text-body dark:text-bodydark">Select ID Type</option>
+                            <option value="NID" {{ old('identification_type') == 'NID' ? 'selected' : '' }} class="text-body dark:text-bodydark">National ID (NID)</option>
+                            <option value="Passport" {{ old('identification_type') == 'Passport' ? 'selected' : '' }} class="text-body dark:text-bodydark">Passport</option>
+                            <option value="Driving License" {{ old('identification_type') == 'Driving License' ? 'selected' : '' }} class="text-body dark:text-bodydark">Driving License</option>
+                        </select>
+                        <span class="absolute top-1/2 right-4 z-30 -translate-y-1/2">
+                            <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <g opacity="0.8">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z" fill=""></path>
+                                </g>
+                            </svg>
+                        </span>
+                    </div>
+                    @error('identification_type')
+                        <p class="text-meta-1 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Identification Number -->
+                <div class="w-full xl:w-1/2">
+                    <label class="mb-2.5 block text-black dark:text-white">
+                        ID Number <span class="text-meta-1">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        name="identification_number"
+                        id="identification_number"
+                        value="{{ old('identification_number') }}"
+                        placeholder="Enter ID number"
+                        required
+                        class="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
+                    @error('identification_number')
+                        <p class="text-meta-1 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="mb-4.5 flex flex-col gap-6 xl:flex-row">
+                <!-- Flat Selection -->
+                <div class="w-full">
                     <label class="mb-2.5 block text-black dark:text-white">
                         Assign Flat <span class="text-meta-1">*</span>
                     </label>
@@ -129,16 +200,16 @@
             <!-- Address -->
             <div class="mb-6">
                 <label class="mb-2.5 block text-black dark:text-white">
-                    Address <span class="text-meta-1">*</span>
+                    Permanent Address <span class="text-meta-1">*</span>
                 </label>
                 <textarea
-                    name="address"
-                    id="address"
+                    name="permanent_address"
+                    id="permanent_address"
                     rows="4"
-                    placeholder="Enter complete address"
+                    placeholder="Enter permanent address"
                     required
-                    class="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">{{ old('address') }}</textarea>
-                @error('address')
+                    class="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">{{ old('permanent_address') }}</textarea>
+                @error('permanent_address')
                     <p class="text-meta-1 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
@@ -282,56 +353,81 @@
                     @enderror
                 </div>
             </div>
+        </div>
+    </div>
 
+    <!-- Emergency Contact Information -->
+    <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark mb-6">
+        <div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+            <h3 class="font-medium text-black dark:text-white">
+                Emergency Contact Information
+            </h3>
+        </div>
+        <div class="p-6.5">
             <div class="mb-6 flex flex-col gap-6 xl:flex-row">
-                <!-- Identification Type -->
+                <!-- Emergency Contact Name -->
                 <div class="w-full xl:w-1/2">
                     <label class="mb-2.5 block text-black dark:text-white">
-                        ID Type
-                    </label>
-                    <div class="relative z-20 bg-transparent">
-                        <select
-                            name="identification_type"
-                            id="identification_type"
-                            class="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary text-black dark:text-white"
-                        >
-                            <option value="" class="text-body dark:text-bodydark">Select ID Type</option>
-                            <option value="Aadhaar" {{ old('identification_type') == 'Aadhaar' ? 'selected' : '' }} class="text-body dark:text-bodydark">Aadhaar</option>
-                            <option value="PAN" {{ old('identification_type') == 'PAN' ? 'selected' : '' }} class="text-body dark:text-bodydark">PAN</option>
-                            <option value="Driving License" {{ old('identification_type') == 'Driving License' ? 'selected' : '' }} class="text-body dark:text-bodydark">Driving License</option>
-                            <option value="Passport" {{ old('identification_type') == 'Passport' ? 'selected' : '' }} class="text-body dark:text-bodydark">Passport</option>
-                            <option value="Voter ID" {{ old('identification_type') == 'Voter ID' ? 'selected' : '' }} class="text-body dark:text-bodydark">Voter ID</option>
-                        </select>
-                        <span class="absolute top-1/2 right-4 z-30 -translate-y-1/2">
-                            <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <g opacity="0.8">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z" fill=""></path>
-                                </g>
-                            </svg>
-                        </span>
-                    </div>
-                    @error('identification_type')
-                        <p class="text-meta-1 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Identification Number -->
-                <div class="w-full xl:w-1/2">
-                    <label class="mb-2.5 block text-black dark:text-white">
-                        ID Number
+                        Emergency Contact Name
                     </label>
                     <input
                         type="text"
-                        name="identification_number"
-                        id="identification_number"
-                        value="{{ old('identification_number') }}"
-                        placeholder="Enter ID number"
+                        name="emergency_contact_name"
+                        id="emergency_contact_name"
+                        value="{{ old('emergency_contact_name') }}"
+                        placeholder="Enter emergency contact name"
                         class="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
-                    @error('identification_number')
+                    @error('emergency_contact_name')
                         <p class="text-meta-1 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
+
+                <!-- Emergency Contact Phone -->
+                <div class="w-full xl:w-1/2">
+                    <label class="mb-2.5 block text-black dark:text-white">
+                        Emergency Contact Phone
+                    </label>
+                    <input
+                        type="text"
+                        name="emergency_contact_phone"
+                        id="emergency_contact_phone"
+                        value="{{ old('emergency_contact_phone') }}"
+                        placeholder="Enter emergency contact phone"
+                        class="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
+                    @error('emergency_contact_phone')
+                        <p class="text-meta-1 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ID Document Upload -->
+    <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark mb-6">
+        <div class="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+            <h3 class="font-medium text-black dark:text-white">
+                ID Document Upload
+            </h3>
+        </div>
+        <div class="p-6.5">
+            <div class="mb-6">
+                <label class="mb-2.5 block text-black dark:text-white">
+                    ID Document Image <span class="text-meta-1">*</span>
+                </label>
+                <input
+                    type="file"
+                    name="id_document_image"
+                    id="id_document_image"
+                    accept="image/*"
+                    required
+                    class="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
+                />
+                <p class="text-sm text-body mt-1">Upload a clear image of your ID document (NID, Passport, or Driving License). Supported formats: JPG, PNG (Max: 5MB)</p>
+                @error('id_document_image')
+                    <p class="text-meta-1 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
         </div>
     </div>

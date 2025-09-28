@@ -7,6 +7,7 @@ use App\Services\FlatService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 
 class TenantController extends Controller
 {
@@ -48,16 +49,18 @@ class TenantController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:tenants,email',
             'phone' => 'required|string|max:20',
-            'address' => 'required|string',
+            'permanent_address' => 'required|string',
+            'date_of_birth' => 'required|date|before:today',
+            'identification_type' => 'required|string|in:NID,Passport,Driving License',
+            'identification_number' => 'required|string|max:100',
+            'id_document_image' => 'required|image|mimes:jpeg,png,jpg|max:5120', // Required ID document image
+            'security_deposit_paid' => 'required|numeric|min:0|max:999999.99',
             'flat_id' => 'required|exists:flats,id',
             'lease_start_date' => 'required|date|after_or_equal:today',
             'lease_end_date' => 'required|date|after:lease_start_date',
-            'security_deposit_paid' => 'required|numeric|min:0|max:999999.99',
-            'monthly_rent' => 'required|numeric|min:0|max:999999.99',
+            'monthly_rent' => 'required|numeric|min:0|max:999999.99', // Required: monthly rent amount
             'emergency_contact_name' => 'nullable|string|max:255',
             'emergency_contact_phone' => 'nullable|string|max:20',
-            'identification_type' => 'nullable|string|in:Aadhaar,PAN,Driving License,Passport,Voter ID',
-            'identification_number' => 'nullable|string|max:100',
         ];
 
         $customMessages = [
@@ -68,20 +71,29 @@ class TenantController extends Controller
             'email.unique' => 'This email address is already registered to another tenant.',
             'phone.required' => 'Phone number is required.',
             'phone.max' => 'Phone number cannot exceed 20 characters.',
-            'address.required' => 'Address is required.',
+            'permanent_address.required' => 'Permanent address is required.',
+            'date_of_birth.required' => 'Date of birth is required.',
+            'date_of_birth.date' => 'Please enter a valid date.',
+            'date_of_birth.before' => 'Date of birth must be before today.',
+            'identification_type.required' => 'ID Type is required.',
+            'identification_type.in' => 'Please select a valid identification type (NID, Passport, or Driving License).',
+            'identification_number.required' => 'ID Number is required.',
+            'id_document_image.required' => 'ID Document image is required.',
+            'id_document_image.image' => 'ID document must be an image.',
+            'id_document_image.mimes' => 'ID document must be a JPEG, PNG, or JPG image.',
+            'id_document_image.max' => 'ID document image cannot exceed 5MB.',
+            'security_deposit_paid.required' => 'Security deposit amount is required.',
+            'security_deposit_paid.numeric' => 'Security deposit must be a valid number.',
+            'security_deposit_paid.min' => 'Security deposit cannot be negative.',
             'flat_id.required' => 'Please select a flat to assign to the tenant.',
             'flat_id.exists' => 'The selected flat is invalid.',
             'lease_start_date.required' => 'Lease start date is required.',
             'lease_start_date.after_or_equal' => 'Lease start date cannot be in the past.',
             'lease_end_date.required' => 'Lease end date is required.',
             'lease_end_date.after' => 'Lease end date must be after the start date.',
-            'security_deposit_paid.required' => 'Security deposit amount is required.',
-            'security_deposit_paid.numeric' => 'Security deposit must be a valid number.',
-            'security_deposit_paid.min' => 'Security deposit cannot be negative.',
             'monthly_rent.required' => 'Monthly rent amount is required.',
             'monthly_rent.numeric' => 'Monthly rent must be a valid number.',
             'monthly_rent.min' => 'Monthly rent cannot be negative.',
-            'identification_type.in' => 'Please select a valid identification type.',
         ];
 
         $request->validate($validationRules, $customMessages);
@@ -94,7 +106,15 @@ class TenantController extends Controller
                     ->withErrors(['flat_id' => 'Selected flat is no longer available.']);
             }
 
-            $this->tenantService->createTenant($request->all());
+            $data = $request->all();
+
+            // Handle file upload
+            if ($request->hasFile('id_document_image')) {
+                $path = $request->file('id_document_image')->store('tenant_documents', 'public');
+                $data['id_document_image'] = $path;
+            }
+
+            $this->tenantService->createTenant($data);
 
             return redirect()->route('tenants.index')
                             ->with('success', 'Tenant added successfully! The flat has been marked as occupied.');
@@ -143,16 +163,18 @@ class TenantController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:tenants,email,' . $id,
             'phone' => 'required|string|max:20',
-            'address' => 'required|string',
+            'permanent_address' => 'required|string',
+            'date_of_birth' => 'required|date|before:today',
+            'identification_type' => 'required|string|in:NID,Passport,Driving License',
+            'identification_number' => 'required|string|max:100',
+            'id_document_image' => 'nullable|image|mimes:jpeg,png,jpg|max:5120', // Optional on update (keep existing if not provided)
+            'security_deposit_paid' => 'required|numeric|min:0|max:999999.99',
             'flat_id' => 'required|exists:flats,id',
             'lease_start_date' => 'required|date',
             'lease_end_date' => 'required|date|after:lease_start_date',
-            'security_deposit_paid' => 'required|numeric|min:0|max:999999.99',
-            'monthly_rent' => 'required|numeric|min:0|max:999999.99',
+            'monthly_rent' => 'required|numeric|min:0|max:999999.99', // Required: monthly rent amount
             'emergency_contact_name' => 'nullable|string|max:255',
             'emergency_contact_phone' => 'nullable|string|max:20',
-            'identification_type' => 'nullable|string|in:Aadhaar,PAN,Driving License,Passport,Voter ID',
-            'identification_number' => 'nullable|string|max:100',
             'is_active' => 'required|boolean',
         ];
 
@@ -164,19 +186,27 @@ class TenantController extends Controller
             'email.unique' => 'This email address is already registered to another tenant.',
             'phone.required' => 'Phone number is required.',
             'phone.max' => 'Phone number cannot exceed 20 characters.',
-            'address.required' => 'Address is required.',
+            'permanent_address.required' => 'Permanent address is required.',
+            'date_of_birth.required' => 'Date of birth is required.',
+            'date_of_birth.date' => 'Please enter a valid date.',
+            'date_of_birth.before' => 'Date of birth must be before today.',
+            'identification_type.required' => 'ID Type is required.',
+            'identification_type.in' => 'Please select a valid identification type (NID, Passport, or Driving License).',
+            'identification_number.required' => 'ID Number is required.',
+            'id_document_image.image' => 'ID document must be an image.',
+            'id_document_image.mimes' => 'ID document must be a JPEG, PNG, or JPG image.',
+            'id_document_image.max' => 'ID document image cannot exceed 5MB.',
+            'security_deposit_paid.required' => 'Security deposit amount is required.',
+            'security_deposit_paid.numeric' => 'Security deposit must be a valid number.',
+            'security_deposit_paid.min' => 'Security deposit cannot be negative.',
             'flat_id.required' => 'Please select a flat to assign to the tenant.',
             'flat_id.exists' => 'The selected flat is invalid.',
             'lease_start_date.required' => 'Lease start date is required.',
             'lease_end_date.required' => 'Lease end date is required.',
             'lease_end_date.after' => 'Lease end date must be after the start date.',
-            'security_deposit_paid.required' => 'Security deposit amount is required.',
-            'security_deposit_paid.numeric' => 'Security deposit must be a valid number.',
-            'security_deposit_paid.min' => 'Security deposit cannot be negative.',
             'monthly_rent.required' => 'Monthly rent amount is required.',
             'monthly_rent.numeric' => 'Monthly rent must be a valid number.',
             'monthly_rent.min' => 'Monthly rent cannot be negative.',
-            'identification_type.in' => 'Please select a valid identification type.',
             'is_active.required' => 'Please specify if the tenant is active.',
         ];
 
@@ -195,7 +225,20 @@ class TenantController extends Controller
                     ->withErrors(['flat_id' => 'Selected flat is not available.']);
             }
 
-            $updated = $this->tenantService->update($id, $request->all());
+            $data = $request->all();
+
+            // Handle file upload
+            if ($request->hasFile('id_document_image')) {
+                // Delete old file if exists
+                if ($tenant->id_document_image) {
+                    Storage::disk('public')->delete($tenant->id_document_image);
+                }
+
+                $path = $request->file('id_document_image')->store('tenant_documents', 'public');
+                $data['id_document_image'] = $path;
+            }
+
+            $updated = $this->tenantService->update($id, $data);
 
             if (!$updated) {
                 return back()->with('error', 'Tenant could not be updated.');

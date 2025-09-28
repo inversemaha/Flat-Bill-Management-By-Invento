@@ -102,6 +102,12 @@
                         <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Phone Number</p>
                         <p class="text-sm text-black dark:text-white">{{ $tenant->phone ?? 'Not provided' }}</p>
                     </div>
+                    @if($tenant->date_of_birth)
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Date of Birth</p>
+                        <p class="text-sm text-black dark:text-white">{{ $tenant->date_of_birth->format('F j, Y') }} ({{ $tenant->date_of_birth->age }} years old)</p>
+                    </div>
+                    @endif
                     @if($tenant->permanent_address)
                     <div>
                         <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Address</p>
@@ -271,6 +277,41 @@
         </div>
         @endif
 
+        <!-- ID Document -->
+        @if($tenant->id_document_image)
+        <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+            <div class="border-b border-stroke py-3 px-5 dark:border-strokedark">
+                <h3 class="text-sm font-semibold text-black dark:text-white flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    ID Document
+                </h3>
+            </div>
+            <div class="p-4">
+                <div class="space-y-3">
+                    @if($tenant->identification_type)
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Document Type</p>
+                        <p class="text-sm text-black dark:text-white">{{ $tenant->identification_type }}</p>
+                    </div>
+                    @endif
+                    <div>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Document Image</p>
+                        <div class="mt-2">
+                            <img
+                                src="{{ asset('storage/' . $tenant->id_document_image) }}"
+                                alt="ID Document"
+                                class="w-full max-w-sm rounded-lg border border-stroke cursor-pointer hover:opacity-80 transition-opacity"
+                                onclick="openImageModal(this.src)"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <!-- Quick Actions -->
         <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div class="border-b border-stroke py-3 px-5 dark:border-strokedark">
@@ -319,5 +360,44 @@
             Back to Tenants
         </a>
     </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+        <div class="relative max-w-4xl max-h-screen p-4">
+            <button onclick="closeImageModal()" class="absolute top-4 right-4 text-white hover:text-gray-300 z-10">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <img id="modalImage" src="" alt="ID Document" class="max-w-full max-h-full rounded-lg" />
+        </div>
+    </div>
 </div>
+
+<script>
+function openImageModal(imageSrc) {
+    document.getElementById('modalImage').src = imageSrc;
+    document.getElementById('imageModal').classList.remove('hidden');
+    document.getElementById('imageModal').classList.add('flex');
+}
+
+function closeImageModal() {
+    document.getElementById('imageModal').classList.add('hidden');
+    document.getElementById('imageModal').classList.remove('flex');
+}
+
+// Close modal when clicking outside the image
+document.getElementById('imageModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeImageModal();
+    }
+});
+
+// Close modal with ESC key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeImageModal();
+    }
+});
+</script>
 @endsection
