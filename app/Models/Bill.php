@@ -70,6 +70,21 @@ class Bill extends Model
     }
 
     /**
+     * Get the tenant through the flat (current active tenant)
+     */
+    public function tenant()
+    {
+        return $this->hasOneThrough(
+            Tenant::class,
+            Flat::class,
+            'id',        // Foreign key on the flats table...
+            'flat_id',   // Foreign key on the tenants table...
+            'flat_id',   // Local key on the bills table...
+            'id'         // Local key on the flats table...
+        )->where('tenants.is_active', true);
+    }
+
+    /**
      * Check if bill is overdue
      */
     public function isOverdue()
