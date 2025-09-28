@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom base styles for better compatibility */
+@layer base {
+  [x-cloak] {
+    display: none !important;
+  }
+
+  body {
+    font-family: 'Outfit', 'Figtree', ui-sans-serif, system-ui, sans-serif;
+  }
+}
+
+/* TailAdmin custom components */
+@layer components {
+  .sidebar-transition {
+    @apply duration-300 ease-linear;
+  }
+
+  .input-style {
+    @apply w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-md border border-primary py-4 px-10 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10;
+  }
+
+  .card {
+    @apply rounded-sm border border-stroke bg-white shadow-default;
+  }
+
+  .card-header {
+    @apply border-b border-stroke py-4 px-6.5;
+  }
+
+  .card-body {
+    @apply p-6.5;
+  }
+}
+
+/* Dark mode styles */
+@layer utilities {
+  .dark .card {
+    @apply border-strokedark bg-boxdark;
+  }
+
+  .dark .card-header {
+    @apply border-strokedark;
+  }
+
+  .dark .input-style {
+    @apply border-form-strokedark bg-form-input focus:border-primary;
+  }
+}
