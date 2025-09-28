@@ -146,18 +146,23 @@ class BillController extends Controller
     /**
      * Mark bill as paid
      */
-    public function markAsPaid(string $id): RedirectResponse
+    public function markAsPaid(Request $request, string $id): RedirectResponse
     {
-        $bill = $this->billService->markAsPaid($id);
+        try {
+            $paymentDetails = [];
+            
+            // Get payment details from request if provided
+            if ($request->has('payment_details')) {
+                $paymentDetails['payment_details'] = $request->input('payment_details');
+            }
+            
+            $bill = $this->billService->markAsPaid($id, $paymentDetails);
 
-        if (!$bill) {
-            return back()->with('error', 'Bill not found or could not be marked as paid.');
+            return back()->with('success', 'Bill marked as paid and notifications sent successfully!');
+            
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error: ' . $e->getMessage());
         }
-
-        // Send payment confirmation email
-        $this->billService->sendBillPaidNotification($bill);
-
-        return back()->with('success', 'Bill marked as paid and notification sent!');
     }
 
     /**
@@ -203,14 +208,29 @@ class BillController extends Controller
             'bill_category_id' => 'required|exists:bill_categories,id',
         ]);
 
+        // Get the building ID for the current house owner
+        $building = null;
+        if (auth()->user()->isHouseOwner()) {
+            $building = auth()->user()->buildings()->first();
+        } else if (auth()->user()->isAdmin()) {
+            // For admin, we need to specify which building or generate for all buildings
+            // For now, let's get the first building or handle it differently
+            $building = \App\Models\Building::first();
+        }
+
+        if (!$building) {
+            return back()->with('error', 'No building found. Please create a building first.');
+        }
+
         $count = $this->billService->generateMonthlyBills(
+            $building->id,
             $request->month,
             $request->year,
             $request->bill_category_id
         );
 
         if ($count > 0) {
-            return back()->with('success', "Generated {$count} bills for the selected month!");
+            return back()->with('success', "Generated {$count} bills for {$building->name} for the selected month!");
         } else {
             return back()->with('error', 'No bills were generated. Please check if there are active tenants and no duplicate bills for this period.');
         }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Building;
 use App\Models\Flat;
 use App\Models\Tenant;
@@ -92,44 +91,81 @@ class DashboardController extends Controller
             'expenses' => [25000, 28000, 26000, 30000, 29000, 32000]
         ];
 
-        // Recent activities - simplified
+        // Recent activities - User login/logout activities with payment status
         $recentActivities = collect();
 
-        // Get recent bills
+        // Get recent users with actual login data
         if ($user->isAdmin()) {
-            $recentBills = Bill::with(['flat.building'])
-                ->latest()
-                ->take(5)
+            $recentUsers = User::whereNotNull('last_login_at')
+                ->orderBy('last_login_at', 'desc')
+                ->take(15)
                 ->get();
         } else {
-            $recentBills = Bill::with(['flat.building'])
-                ->whereHas('flat', function($q) use ($userBuildings) {
-                    $q->whereIn('building_id', $userBuildings);
+            // For non-admin users, show limited data
+            $recentUsers = User::whereNotNull('last_login_at')
+                ->where(function($query) use ($user) {
+                    $query->where('id', $user->id);
+                    if ($user->isHouseOwner()) {
+                        $query->orWhere('role', 'tenant');
+                    }
                 })
-                ->latest()
-                ->take(5)
+                ->orderBy('last_login_at', 'desc')
+                ->take(8)
                 ->get();
         }
 
-        foreach ($recentBills as $bill) {
-            // Get tenant for this flat
-            $tenant = Tenant::where('flat_id', $bill->flat_id)->first();
+        foreach ($recentUsers as $activityUser) {
+            $lastLogin = $activityUser->last_login_at;
+            
+            if ($lastLogin) {
+                // Determine online status (online if logged in within last 15 minutes)
+                $isOnline = $lastLogin->diffInMinutes(now()) < 15;
+                
+                // Role display mapping
+                $roleDisplay = [
+                    'admin' => 'Administrator',
+                    'house_owner' => 'House Owner',
+                    'tenant' => 'Tenant',
+                ];
+                
+                // Add login activity
+                $recentActivities->push([
+                    'user_name' => $activityUser->name,
+                    'user_email' => $activityUser->email,
+                    'role' => $roleDisplay[$activityUser->role] ?? 'User',
+                    'role_class' => $activityUser->role,
+                    'activity_type' => 'login',
+                    'activity_description' => 'User logged in to system',
+                    'time' => $lastLogin->diffForHumans(),
+                    'exact_time' => $lastLogin->format('M j, Y H:i'),
+                    'login_time' => $lastLogin->format('H:i'),
+                    'logout_time' => $isOnline ? 'Active' : 'Session ended',
+                    'status' => $isOnline ? 'online' : 'offline',
+                    'created_at' => $lastLogin
+                ]);
+            }
+        }
 
+        // If no users have logged in yet, add current user's activity
+        if ($recentActivities->isEmpty()) {
             $recentActivities->push([
-                'id' => $bill->id,
-                'type' => 'bill',
-                'tenant_name' => $tenant ? $tenant->name : 'No Tenant',
-                'flat_number' => $bill->flat->flat_number,
-                'building_name' => $bill->flat->building->name,
-                'amount' => $bill->amount,
-                'status' => $bill->status,
-                'date' => $bill->created_at->format('M d, Y'),
-                'activity' => 'Bill Generated'
+                'user_name' => $user->name,
+                'user_email' => $user->email,
+                'role' => $user->isAdmin() ? 'Administrator' : ($user->isHouseOwner() ? 'House Owner' : 'User'),
+                'role_class' => $user->role,
+                'activity_type' => 'login',
+                'activity_description' => 'Current session',
+                'time' => 'Active now',
+                'exact_time' => now()->format('M j, Y H:i'),
+                'login_time' => now()->format('H:i'),
+                'logout_time' => 'Active',
+                'status' => 'online',
+                'created_at' => now()
             ]);
         }
 
-        // Sort activities by date
-        $recentActivities = $recentActivities->sortByDesc('date')->take(10);
+        // Sort activities by date and take the most recent ones
+        $recentActivities = $recentActivities->sortByDesc('created_at')->take(10);
 
         return view('dashboard', compact(
             'stats',

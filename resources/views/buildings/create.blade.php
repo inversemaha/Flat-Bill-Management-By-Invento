@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', auth()->user()->isAdmin() ? 'Create House Owner & Building' : 'Setup My Building')
+@section('title', auth()->user()->isAdmin() ? 'Building' : 'Setup My Building')
 
 @section('content')
 <!-- Breadcrumb Start -->
 <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <h2 class="text-title-md2 font-bold text-black dark:text-white">
         @if(auth()->user()->isAdmin())
-            Create House Owner & Building
+            Building
         @else
             Setup My Building
         @endif
@@ -20,7 +20,7 @@
             <li>
                 <a class="font-medium" href="{{ route('buildings.index') }}">
                     @if(auth()->user()->isAdmin())
-                        House Owners /
+                        Building /
                     @else
                         My Building /
                     @endif

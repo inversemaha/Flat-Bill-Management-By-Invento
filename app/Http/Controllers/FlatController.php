@@ -23,10 +23,29 @@ class FlatController extends Controller
     /**
      * Display a listing of flats
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $flats = $this->flatService->getFlatsWithBuilding();
-        return view('flats.index', compact('flats'));
+        $filter = $request->get('filter', 'all'); // Get filter parameter, default to 'all'
+
+        switch ($filter) {
+            case 'occupied':
+                $flats = $this->flatService->getOccupiedFlats();
+                $title = 'Occupied Flats';
+                $subtitle = 'Flats currently occupied by tenants';
+                break;
+            case 'vacant':
+                $flats = $this->flatService->getAvailableFlats();
+                $title = 'Vacant Flats';
+                $subtitle = 'Flats available for rent';
+                break;
+            default:
+                $flats = $this->flatService->getFlatsWithBuilding();
+                $title = 'All Flats';
+                $subtitle = 'Complete listing of all flats';
+                break;
+        }
+
+        return view('flats.index', compact('flats', 'filter', 'title', 'subtitle'));
     }
 
     /**

@@ -20,7 +20,7 @@
 <!-- Summary Cards -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <!-- Total Buildings Card -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md transition-shadow">
+    <a href="{{ route('buildings.index') }}" class="block bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md transition-all duration-200 transform hover:scale-105 cursor-pointer">
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Buildings</p>
@@ -29,7 +29,7 @@
                     <svg class="w-4 h-4 text-orange-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                     </svg>
-                    <span class="text-xs text-orange-600 font-medium">Active</span>
+                    <span class="text-xs text-orange-600 font-medium">View All Buildings</span>
                 </div>
             </div>
             <div class="flex items-center justify-center w-12 h-12 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
@@ -38,10 +38,10 @@
                 </svg>
             </div>
         </div>
-    </div>
+    </a>
 
     <!-- Total Flats Card -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md transition-shadow">
+    <a href="{{ route('flats.index') }}" class="block bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md transition-all duration-200 transform hover:scale-105 cursor-pointer">
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Flats</p>
@@ -50,7 +50,7 @@
                     <svg class="w-4 h-4 text-blue-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                     </svg>
-                    <span class="text-xs text-blue-600 font-medium">Total Units</span>
+                    <span class="text-xs text-blue-600 font-medium">View All Flats</span>
                 </div>
             </div>
             <div class="flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
@@ -59,10 +59,10 @@
                 </svg>
             </div>
         </div>
-    </div>
+    </a>
 
     <!-- Occupied Flats Card -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md transition-shadow">
+    <a href="{{ route('flats.index', ['filter' => 'occupied']) }}" class="block bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md transition-all duration-200 transform hover:scale-105 cursor-pointer">
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Occupied Flats</p>
@@ -80,10 +80,10 @@
                 </svg>
             </div>
         </div>
-    </div>
+    </a>
 
     <!-- Vacant Flats Card -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md transition-shadow">
+    <a href="{{ route('flats.index', ['filter' => 'vacant']) }}" class="block bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md transition-all duration-200 transform hover:scale-105 cursor-pointer">
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Vacant Flats</p>
@@ -102,7 +102,7 @@
                 </svg>
             </div>
         </div>
-    </div>
+    </a>
 </div>
 
 <!-- Financial Overview Section -->
@@ -140,14 +140,14 @@
                     <div class="w-3 h-3 bg-green-500 rounded-full"></div>
                     <span class="text-sm font-medium text-gray-900 dark:text-white">Paid</span>
                 </div>
-                <p class="text-2xl font-bold text-green-600">${{ number_format($stats['paid_amount'] ?? 0, 0) }}</p>
+                <p class="text-2xl font-bold text-green-600">৳{{ number_format($stats['paid_amount'] ?? 0, 0) }}</p>
             </div>
             <div class="text-center">
                 <div class="flex items-center justify-center gap-2 mb-1">
                     <div class="w-3 h-3 bg-red-500 rounded-full"></div>
                     <span class="text-sm font-medium text-gray-900 dark:text-white">Pending</span>
                 </div>
-                <p class="text-2xl font-bold text-red-600">${{ number_format($stats['pending_amount'] ?? 0, 0) }}</p>
+                <p class="text-2xl font-bold text-red-600">৳{{ number_format($stats['pending_amount'] ?? 0, 0) }}</p>
             </div>
         </div>
     </div>
@@ -214,7 +214,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Activities</h3>
-                <p class="text-sm text-gray-600 dark:text-gray-400">Latest system activities and transactions</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Latest system activities showing user roles, login times, and status</p>
             </div>
             <button class="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                 View All
@@ -225,46 +225,110 @@
         <table class="min-w-full">
             <thead class="bg-gray-50 dark:bg-gray-900/50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Activity</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">User</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Time</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Role</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Login Time</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Logout Time</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 @forelse($recentActivities ?? [] as $activity)
                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                    <!-- User Info -->
                     <td class="px-6 py-4">
                         <div class="flex items-center">
-                            <div class="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center mr-3">
-                                <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                                </svg>
+                            <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mr-3">
+                                <span class="text-white font-semibold text-sm">
+                                    {{ strtoupper(substr($activity['user_name'] ?? 'U', 0, 2)) }}
+                                </span>
                             </div>
-                            <span class="text-sm text-gray-900 dark:text-white">{{ $activity['message'] ?? 'New activity logged' }}</span>
+                            <div>
+                                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $activity['user_name'] ?? 'Unknown User' }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{ $activity['user_email'] ?? '' }}</p>
+                            </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                        {{ $activity['user'] ?? 'System Admin' }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                        {{ $activity['time'] ?? 'Just now' }}
-                    </td>
+                    
+                    <!-- Role -->
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full
-                            {{ ($activity['status'] ?? 'active') === 'active' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400' }}">
-                            {{ ucfirst($activity['status'] ?? 'Active') }}
+                        @php
+                            $roleConfig = [
+                                'admin' => ['bg' => 'bg-purple-100 dark:bg-purple-900/20', 'text' => 'text-purple-800 dark:text-purple-400', 'label' => 'Admin'],
+                                'house_owner' => ['bg' => 'bg-blue-100 dark:bg-blue-900/20', 'text' => 'text-blue-800 dark:text-blue-400', 'label' => 'House Owner'],
+                                'tenant' => ['bg' => 'bg-green-100 dark:bg-green-900/20', 'text' => 'text-green-800 dark:text-green-400', 'label' => 'Tenant'],
+                                'default' => ['bg' => 'bg-gray-100 dark:bg-gray-900/20', 'text' => 'text-gray-800 dark:text-gray-400', 'label' => 'User']
+                            ];
+                            $config = $roleConfig[$activity['role_class'] ?? 'default'] ?? $roleConfig['default'];
+                        @endphp
+                        <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full {{ $config['bg'] }} {{ $config['text'] }}">
+                            {{ $activity['role'] ?? 'User' }}
                         </span>
+                    </td>
+                    
+                    <!-- Login Time -->
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center mr-3">
+                                <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-medium">{{ $activity['login_time'] ?? 'Unknown' }}</p>
+                                <p class="text-xs text-gray-500">{{ $activity['time'] ?? 'Unknown' }}</p>
+                            </div>
+                        </div>
+                    </td>
+                    
+                    <!-- Logout Time -->
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                        <div class="flex items-center">
+                            @if($activity['logout_time'] === 'Active')
+                                <div class="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center mr-3">
+                                    <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z"/>
+                                    </svg>
+                                </div>
+                                <span class="text-green-600 dark:text-green-400 font-medium">{{ $activity['logout_time'] }}</span>
+                            @else
+                                <div class="flex-shrink-0 w-8 h-8 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center mr-3">
+                                    <svg class="w-4 h-4 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                    </svg>
+                                </div>
+                                <span class="text-red-600 dark:text-red-400">{{ $activity['logout_time'] }}</span>
+                            @endif
+                        </div>
+                    </td>
+                    
+                    <!-- Status -->
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        @php
+                            $statusConfig = [
+                                'online' => ['bg' => 'bg-green-100 dark:bg-green-900/20', 'text' => 'text-green-800 dark:text-green-400', 'dot' => 'bg-green-400'],
+                                'offline' => ['bg' => 'bg-gray-100 dark:bg-gray-900/20', 'text' => 'text-gray-800 dark:text-gray-400', 'dot' => 'bg-gray-400'],
+                                'away' => ['bg' => 'bg-yellow-100 dark:bg-yellow-900/20', 'text' => 'text-yellow-800 dark:text-yellow-400', 'dot' => 'bg-yellow-400']
+                            ];
+                            $status = $activity['status'] ?? 'offline';
+                            $config = $statusConfig[$status] ?? $statusConfig['offline'];
+                        @endphp
+                        <div class="flex items-center">
+                            <div class="w-2 h-2 {{ $config['dot'] }} rounded-full mr-2"></div>
+                            <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full {{ $config['bg'] }} {{ $config['text'] }}">
+                                {{ ucfirst($status) }}
+                            </span>
+                        </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="4" class="px-6 py-8 text-center">
+                    <td colspan="5" class="px-6 py-8 text-center">
                         <div class="flex flex-col items-center justify-center">
                             <svg class="w-12 h-12 text-gray-400 dark:text-gray-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                             </svg>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">No recent activities</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">No recent user activities</p>
                         </div>
                     </td>
                 </tr>
@@ -329,7 +393,7 @@ document.addEventListener('DOMContentLoaded', function() {
             yaxis: {
                 labels: {
                     formatter: function (value) {
-                        return '$' + (value / 1000).toFixed(0) + 'k';
+                        return '৳' + (value / 1000).toFixed(0) + 'k';
                     },
                     style: {
                         colors: '#6b7280',
@@ -348,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
                 y: {
                     formatter: function (value) {
-                        return '$' + value.toLocaleString();
+                        return '৳' + value.toLocaleString();
                     }
                 }
             },
@@ -383,7 +447,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 enabled: true,
                 formatter: function (val, opts) {
                     const value = opts.w.config.series[opts.seriesIndex];
-                    return '$' + (value / 1000).toFixed(0) + 'k';
+                    return '৳' + (value / 1000).toFixed(0) + 'k';
                 },
                 style: {
                     fontSize: '14px',
@@ -407,7 +471,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 fontWeight: 'bold',
                                 formatter: function (w) {
                                     const total = w.globals.seriesTotals.reduce((a, b) => a + b, 0);
-                                    return '$' + (total / 1000).toFixed(0) + 'k';
+                                    return '৳' + (total / 1000).toFixed(0) + 'k';
                                 }
                             }
                         }
@@ -419,7 +483,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
                 y: {
                     formatter: function (value) {
-                        return '$' + value.toLocaleString();
+                        return '৳' + value.toLocaleString();
                     }
                 }
             }
@@ -469,7 +533,7 @@ document.addEventListener('DOMContentLoaded', function() {
             yaxis: {
                 labels: {
                     formatter: function (value) {
-                        return '$' + (value / 1000).toFixed(0) + 'k';
+                        return '৳' + (value / 1000).toFixed(0) + 'k';
                     },
                     style: {
                         colors: '#6b7280',
@@ -488,7 +552,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
                 y: {
                     formatter: function (value) {
-                        return '$' + value.toLocaleString();
+                        return '৳' + value.toLocaleString();
                     }
                 }
             },

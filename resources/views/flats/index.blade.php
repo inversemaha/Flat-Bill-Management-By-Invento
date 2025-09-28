@@ -5,9 +5,14 @@
 @section('content')
 <!-- Breadcrumb Start -->
 <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-    <h2 class="text-title-md2 font-bold text-black dark:text-white">
-        Flats Management
-    </h2>
+    <div>
+        <h2 class="text-title-md2 font-bold text-black dark:text-white">
+            {{ $title ?? 'Flats Management' }}
+        </h2>
+        @if(isset($subtitle))
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ $subtitle }}</p>
+        @endif
+    </div>
     <nav>
         <ol class="flex items-center gap-2">
             <li>
@@ -22,17 +27,62 @@
 <div class="rounded-sm border border-stroke bg-white px-5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5">
     <div class="max-w-full overflow-x-auto">
         <!-- Header Section -->
-        <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <h4 class="text-xl font-semibold text-black dark:text-white">
-                {{ auth()->user()->isAdmin() ? 'All Flats' : 'My Flats' }}
-            </h4>
-            <a href="{{ route('flats.create') }}"
-               class="inline-flex items-center justify-center rounded-md bg-primary py-2 px-6 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
-                <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-                Add New Flat
-            </a>
+        <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <h4 class="text-xl font-semibold text-black dark:text-white">
+                    {{ $title ?? (auth()->user()->isAdmin() ? 'All Flats' : 'My Flats') }}
+                    <span class="text-sm font-normal text-gray-500 dark:text-gray-400 ml-2">({{ count($flats) }} {{ count($flats) == 1 ? 'flat' : 'flats' }})</span>
+                </h4>
+
+                <!-- Filter Status Indicator -->
+                @if(isset($filter) && $filter !== 'all')
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="text-sm text-gray-600 dark:text-gray-400">Filtered by:</span>
+                    @php
+                        $filterConfig = [
+                            'occupied' => ['class' => 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400', 'text' => 'Occupied Flats'],
+                            'vacant' => ['class' => 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400', 'text' => 'Vacant Flats']
+                        ];
+                        $config = $filterConfig[$filter] ?? ['class' => 'bg-gray-100 text-gray-800', 'text' => 'All Flats'];
+                    @endphp
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $config['class'] }}">
+                        {{ $config['text'] }}
+                    </span>
+                    <a href="{{ route('flats.index') }}" class="text-xs text-primary hover:underline">Clear Filter</a>
+                </div>
+                @endif
+            </div>
+
+            <!-- Quick Filter & Add Button -->
+            <div class="flex items-center gap-3">
+                <!-- Quick Filter Buttons -->
+                @if(!isset($filter) || $filter === 'all')
+                <div class="flex items-center gap-2">
+                    <a href="{{ route('flats.index', ['filter' => 'occupied']) }}"
+                       class="inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium border border-red-200 text-red-700 bg-red-50 hover:bg-red-100 dark:border-red-800 dark:text-red-400 dark:bg-red-900/10 dark:hover:bg-red-900/20">
+                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                        </svg>
+                        Occupied
+                    </a>
+                    <a href="{{ route('flats.index', ['filter' => 'vacant']) }}"
+                       class="inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium border border-green-200 text-green-700 bg-green-50 hover:bg-green-100 dark:border-green-800 dark:text-green-400 dark:bg-green-900/10 dark:hover:bg-green-900/20">
+                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2v8h12V6H4z" clip-rule="evenodd"/>
+                        </svg>
+                        Vacant
+                    </a>
+                </div>
+                @endif
+
+                <a href="{{ route('flats.create') }}"
+                   class="inline-flex items-center justify-center rounded-md bg-primary py-2 px-6 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
+                    <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Add New Flat
+                </a>
+            </div>
         </div>
 
         @if ($flats->isEmpty())
@@ -40,16 +90,67 @@
             <div class="rounded-sm border border-stroke bg-white py-20 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
                 <div class="text-center">
                     <div class="mx-auto mb-6 h-16 w-16 rounded-full bg-gray-100 flex items-center justify-center dark:bg-gray-800">
-                        <svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2v2zm0 0h18m-9 2v6"></path>
-                        </svg>
+                        @if(isset($filter))
+                            @if($filter === 'occupied')
+                                <svg class="h-8 w-8 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                </svg>
+                            @elseif($filter === 'vacant')
+                                <svg class="h-8 w-8 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2v8h12V6H4z" clip-rule="evenodd"/>
+                                </svg>
+                            @else
+                                <svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2v2zm0 0h18m-9 2v6"></path>
+                                </svg>
+                            @endif
+                        @else
+                            <svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2v2zm0 0h18m-9 2v6"></path>
+                            </svg>
+                        @endif
                     </div>
-                    <h3 class="mb-2 text-xl font-semibold text-black dark:text-white">No flats found</h3>
-                    <p class="mb-6 text-gray-500 dark:text-gray-400">Start by creating flats in your buildings to manage tenants and rental properties.</p>
-                    <a href="{{ route('flats.create') }}"
-                       class="inline-flex items-center justify-center rounded-md bg-primary py-3 px-6 text-center font-medium text-white hover:bg-opacity-90">
-                        Create Your First Flat
-                    </a>
+
+                    @php
+                        $emptyStateConfig = [
+                            'occupied' => [
+                                'title' => 'No occupied flats found',
+                                'message' => 'All your flats are currently available for rent. Great opportunity to find new tenants!'
+                            ],
+                            'vacant' => [
+                                'title' => 'No vacant flats found',
+                                'message' => 'All your flats are currently occupied. Excellent occupancy rate!'
+                            ],
+                            'all' => [
+                                'title' => 'No flats found',
+                                'message' => 'Start by creating flats in your buildings to manage tenants and rental properties.'
+                            ]
+                        ];
+                        $config = $emptyStateConfig[$filter ?? 'all'] ?? $emptyStateConfig['all'];
+                    @endphp
+
+                    <h3 class="mb-2 text-xl font-semibold text-black dark:text-white">{{ $config['title'] }}</h3>
+                    <p class="mb-6 text-gray-500 dark:text-gray-400">{{ $config['message'] }}</p>
+
+                    @if($filter && $filter !== 'all')
+                        <div class="flex justify-center gap-3">
+                            <a href="{{ route('flats.index') }}"
+                               class="inline-flex items-center justify-center rounded-md bg-gray-100 py-3 px-6 text-center font-medium text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
+                                View All Flats
+                            </a>
+                            @if($filter === 'vacant')
+                                <a href="{{ route('flats.create') }}"
+                                   class="inline-flex items-center justify-center rounded-md bg-primary py-3 px-6 text-center font-medium text-white hover:bg-opacity-90">
+                                    Add New Flat
+                                </a>
+                            @endif
+                        </div>
+                    @else
+                        <a href="{{ route('flats.create') }}"
+                           class="inline-flex items-center justify-center rounded-md bg-primary py-3 px-6 text-center font-medium text-white hover:bg-opacity-90">
+                            Create Your First Flat
+                        </a>
+                    @endif
                 </div>
             </div>
         @else

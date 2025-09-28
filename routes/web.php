@@ -7,6 +7,9 @@ use App\Http\Controllers\TenantController;
 use App\Http\Controllers\BillCategoryController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\HouseOwnerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -53,6 +56,26 @@ Route::middleware(['auth', 'multitenant'])->group(function () {
     // Additional bill routes
     Route::post('bills/{id}/mark-as-paid', [BillController::class, 'markAsPaid'])->name('bills.mark-as-paid');
     Route::post('bills/generate-monthly', [BillController::class, 'generateMonthlyBills'])->name('bills.generate-monthly');
+});
+
+// Admin only routes
+Route::middleware(['auth', 'admin'])->group(function () {
+    // Admin management routes
+    Route::resource('admins', AdminController::class);
+    
+    // House Owner management routes
+    Route::resource('house-owners', HouseOwnerController::class);
+    
+    // House Owner status management
+    Route::post('house-owners/{houseOwner}/approve', [HouseOwnerController::class, 'approve'])->name('house-owners.approve');
+    Route::post('house-owners/{houseOwner}/deactivate', [HouseOwnerController::class, 'deactivate'])->name('house-owners.deactivate');
+    Route::post('house-owners/{houseOwner}/reactivate', [HouseOwnerController::class, 'reactivate'])->name('house-owners.reactivate');
+    
+    // Legacy user management routes (for backward compatibility)
+    Route::resource('users', UserController::class);
+    Route::post('users/{user}/approve', [UserController::class, 'approve'])->name('users.approve');
+    Route::post('users/{user}/deactivate', [UserController::class, 'deactivate'])->name('users.deactivate');
+    Route::post('users/{user}/reactivate', [UserController::class, 'reactivate'])->name('users.reactivate');
 });
 
 require __DIR__.'/auth.php';

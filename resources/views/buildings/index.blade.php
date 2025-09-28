@@ -7,7 +7,7 @@
 <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <h2 class="text-title-md2 font-bold text-black dark:text-white">
         @if(auth()->user()->isAdmin())
-            House Owners & Buildings
+            Buildings
         @else
             My Building
         @endif
@@ -19,7 +19,7 @@
             </li>
             <li class="font-medium text-primary">
                 @if(auth()->user()->isAdmin())
-                    House Owners
+                    Building
                 @else
                     My Building
                 @endif
@@ -35,7 +35,7 @@
         <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <h4 class="text-xl font-semibold text-black dark:text-white">
                 @if(auth()->user()->isAdmin())
-                    All House Owners & Buildings
+                    Buildings
                 @else
                     Building Information
                 @endif
@@ -46,7 +46,7 @@
                 <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
-                Add New House Owner
+                Add Building
             </a>
             @elseif(auth()->user()->isHouseOwner() && $buildings->isEmpty())
             <a href="{{ route('buildings.create') }}"

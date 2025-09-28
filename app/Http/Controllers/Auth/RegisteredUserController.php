@@ -44,14 +44,20 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
+            'status' => $request->role === 'house_owner' ? 'pending' : 'active', // House owners need approval
             'phone' => $request->phone,
             'address' => $request->address,
         ]);
 
         event(new Registered($user));
 
-        Auth::login($user);
-
-        return redirect(RouteServiceProvider::HOME);
+        // Don't auto-login house owners if they're pending approval
+        if ($user->isActive()) {
+            Auth::login($user);
+            return redirect(RouteServiceProvider::HOME);
+        } else {
+            return redirect()->route('login')
+                ->with('status', 'Registration successful! Your account is pending admin approval. You will be notified once approved.');
+        }
     }
 }

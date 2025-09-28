@@ -49,6 +49,25 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Check if user is active (for house owners and admins)
+        $user = Auth::user();
+        if ($user && !$user->isActive()) {
+            Auth::logout();
+            
+            $message = $user->isPending() 
+                ? 'Your account is pending approval. Please wait for admin approval.'
+                : 'Your account has been deactivated. Please contact administrator.';
+            
+            throw ValidationException::withMessages([
+                'email' => $message,
+            ]);
+        }
+
+        // Update last login time
+        if ($user) {
+            $user->update(['last_login_at' => now()]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 
