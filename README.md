@@ -10,6 +10,7 @@ A comprehensive Laravel-based multi-tenant system for managing buildings, flats,
 - [Installation](#installation)
 - [Database Setup](#database-setup)
 - [Configuration](#configuration)
+- [Live Demo](#live-demo)
 - [Multi-Tenant Architecture](#multi-tenant-architecture)
 - [User Roles & Permissions](#user-roles--permissions)
 - [Email Notifications](#email-notifications)
@@ -103,8 +104,8 @@ DB_PASSWORD=
 MAIL_MAILER=smtp
 MAIL_HOST=sandbox.smtp.mailtrap.io
 MAIL_PORT=587
-MAIL_USERNAME=8d5460cbc7987b
-MAIL_PASSWORD=458fe2c4942422
+MAIL_USERNAME=#
+MAIL_PASSWORD=#
 MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS="noreply@flatmanager.com"
 MAIL_FROM_NAME="${APP_NAME}"
@@ -169,9 +170,28 @@ php artisan queue:work
 
 ### 3. Access the Application
 
+**Local Development:**
 - **URL**: http://localhost:8000
 - **Default Admin**: admin@flatmanager.com / password
 - **Default House Owner**: abdullah.mamun@example.com / password
+
+## 🌐 Live Demo
+
+You can test the application using the live demo:
+
+**Demo URL**: https://maha.vocalize.pro/
+
+### Demo Credentials
+
+**Super Admin:**
+- **Email**: admin@flatmanager.com
+- **Password**: password
+
+**House Owner:**
+- **Email**: abdullah.mamun@example.com
+- **Password**: password
+
+> **Note**: This is a demo environment. Data may be reset periodically.
 
 ## 🏗 Multi-Tenant Architecture
 
