@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -62,15 +62,15 @@ Route::middleware(['auth', 'multitenant'])->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     // Admin management routes
     Route::resource('admins', AdminController::class);
-    
+
     // House Owner management routes
     Route::resource('house-owners', HouseOwnerController::class);
-    
+
     // House Owner status management
     Route::post('house-owners/{houseOwner}/approve', [HouseOwnerController::class, 'approve'])->name('house-owners.approve');
     Route::post('house-owners/{houseOwner}/deactivate', [HouseOwnerController::class, 'deactivate'])->name('house-owners.deactivate');
     Route::post('house-owners/{houseOwner}/reactivate', [HouseOwnerController::class, 'reactivate'])->name('house-owners.reactivate');
-    
+
     // Legacy user management routes (for backward compatibility)
     Route::resource('users', UserController::class);
     Route::post('users/{user}/approve', [UserController::class, 'approve'])->name('users.approve');

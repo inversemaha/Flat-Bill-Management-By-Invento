@@ -43,5 +43,20 @@
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
+
+        <!-- House Owner Registration Section -->
+        <div class="mt-6 pt-6 border-t border-gray-200">
+            <div class="text-center">
+                <p class="text-sm text-gray-600 mb-3">
+                    {{ __('New House Owner?') }}
+                </p>
+                <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                    {{ __('Register as House Owner') }}
+                </a>
+                <p class="text-xs text-gray-500 mt-2">
+                    {{ __('Registration requires admin approval') }}
+                </p>
+            </div>
+        </div>
     </form>
 </x-guest-layout>
