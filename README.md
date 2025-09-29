@@ -13,8 +13,6 @@ A comprehensive Laravel-based multi-tenant system for managing buildings, flats,
 - [Multi-Tenant Architecture](#multi-tenant-architecture)
 - [User Roles & Permissions](#user-roles--permissions)
 - [Email Notifications](#email-notifications)
-- [API Documentation](#api-documentation)
-- [Testing](#testing)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -273,29 +271,6 @@ php artisan queue:work    - Process email queue
 - **Bill details** including property and tenant information
 - **Payment instructions** and due date reminders
 - **Branding** with system logo and colors
-
-## 🧪 Testing
-
-### Run Tests
-
-```bash
-# Run all tests
-php artisan test
-
-# Run specific test suites
-php artisan test --testsuite=Feature
-php artisan test --testsuite=Unit
-
-# Generate coverage report
-php artisan test --coverage
-```
-
-### Test Coverage
-
-- **Unit Tests**: Model relationships and business logic
-- **Feature Tests**: HTTP endpoints and authentication
-- **Browser Tests**: End-to-end user workflows
-- **Email Tests**: Notification delivery verification
 
 ## 🎯 Performance Optimizations
 
