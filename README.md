@@ -179,7 +179,7 @@ php artisan queue:work
 
 You can test the application using the live demo:
 
-**Demo URL**: https://maha.vocalize.pro/
+**Demo URL**: https://maha.bankcardayojon.com/
 
 ### Demo Credentials
 
