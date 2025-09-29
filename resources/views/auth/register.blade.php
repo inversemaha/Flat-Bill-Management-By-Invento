@@ -16,14 +16,14 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <!-- Role -->
-        <div class="mt-4">
-            <x-input-label for="role" :value="__('Role')" />
-            <select id="role" name="role" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                <option value="house_owner" {{ old('role') == 'house_owner' ? 'selected' : '' }}>House Owner</option>
-                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-            </select>
-            <x-input-error :messages="$errors->get('role')" class="mt-2" />
+        <!-- Role - Hidden, always house_owner -->
+        <input type="hidden" name="role" value="house_owner">
+
+        <div class="mt-4 bg-blue-50 border border-blue-200 rounded-md p-4">
+            <p class="text-sm text-blue-800">
+                <strong>Registering as House Owner</strong><br>
+                Your account will be pending admin approval. You'll be notified once approved.
+            </p>
         </div>
 
         <!-- Phone -->

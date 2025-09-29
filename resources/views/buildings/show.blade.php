@@ -122,6 +122,7 @@
                 @endif
 
                 <div class="flex gap-4 mt-8">
+                    @if(auth()->user()->isAdmin())
                     <a href="{{ route('buildings.edit', $building->id) }}"
                        class="inline-flex items-center justify-center rounded-md bg-primary py-2 px-6 text-center font-medium text-white hover:bg-opacity-90">
                         <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -129,6 +130,7 @@
                         </svg>
                         Edit Building
                     </a>
+                    @endif
                     <a href="{{ route('buildings.index') }}"
                        class="inline-flex items-center justify-center rounded-md border border-stroke py-2 px-6 text-center font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white">
                         Back to Buildings

@@ -1,66 +1,370 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Multi-Tenant Flat & Bill Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A comprehensive Laravel-based multi-tenant system for managing buildings, flats, and bills with role-based access control and automated email notifications.
 
-## About Laravel
+## 📋 Table of Contents
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [System Requirements](#system-requirements)
+- [Installation](#installation)
+- [Database Setup](#database-setup)
+- [Configuration](#configuration)
+- [Multi-Tenant Architecture](#multi-tenant-architecture)
+- [User Roles & Permissions](#user-roles--permissions)
+- [Email Notifications](#email-notifications)
+- [API Documentation](#api-documentation)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [License](#license)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Core Functionality
+- **Multi-tenant architecture** with complete data isolation
+- **Role-based access control** (Admin, House Owner)
+- **Building and Flat Management** with detailed owner information
+- **Tenant Assignment** and management
+- **Bill Management** with category support and due tracking
+- **Automated Email Notifications** for bill creation and payments
+- **Due Amount Management** with forward carrying capability
 
-## Learning Laravel
+### Business Features
+- **Bill Categories**: Electricity, Gas, Water, Utility Charges
+- **Payment Tracking**: Paid/Unpaid status management
+- **Tenant Assignment**: Admin-controlled tenant-to-building assignment
+- **Multi-tenant Isolation**: House owners can only access their own data
+- **Dashboard Analytics**: Overview of buildings, flats, tenants, and bills
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠 Tech Stack
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Backend**: Laravel 10.x
+- **Frontend**: Tailwind CSS, Alpine.js
+- **Database**: MySQL/PostgreSQL
+- **Authentication**: Laravel Breeze
+- **Email**: Laravel Mail with Queue support
+- **Architecture**: Service-Repository Pattern
+- **Caching**: Redis (optional)
+- **Queue**: Database/Redis driver
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 📋 System Requirements
 
-## Laravel Sponsors
+- PHP >= 8.1
+- Composer >= 2.0
+- Node.js >= 16.x
+- MySQL >= 8.0 or PostgreSQL >= 12
+- Redis (optional, for caching and queues)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🚀 Installation
 
-### Premium Partners
+### 1. Clone the Repository
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```bash
+git clone https://github.com/inversemaha/Flat-Bill-Management-By-Invento.git
+cd flat-bill-management
+```
 
-## Contributing
+### 2. Install Dependencies
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+# Install PHP dependencies
+composer install
 
-## Code of Conduct
+# Install Node.js dependencies
+npm install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 3. Environment Setup
 
-## Security Vulnerabilities
+```bash
+# Copy environment file
+cp .env.example .env
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Generate application key
+php artisan key:generate
+```
 
-## License
+### 4. Configure Environment Variables
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Edit `.env` file with your configuration:
+
+```env
+# Application
+APP_NAME="Flat Bill Management"
+APP_URL=http://localhost:8000
+
+# Database
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=flat_bill_management
+DB_USERNAME=root
+DB_PASSWORD=
+
+# Mail Configuration (for email notifications)
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=587
+MAIL_USERNAME=8d5460cbc7987b
+MAIL_PASSWORD=458fe2c4942422
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="noreply@flatmanager.com"
+MAIL_FROM_NAME="${APP_NAME}"
+
+# Queue (for email processing)
+QUEUE_CONNECTION=database
+```
+
+## 🗄 Database Setup
+
+### 1. Create Database
+
+```bash
+# Create database
+mysql -u root -p
+CREATE DATABASE flat_bill_management;
+EXIT;
+```
+
+### 2. Run Migrations and Seeders
+
+```bash
+# Run migrations
+php artisan migrate
+
+# Seed the database with sample data
+php artisan db:seed
+```
+
+### 3. Database Structure
+
+The system includes the following tables:
+
+- **users**: Admin and House Owner accounts
+- **buildings**: Buildings owned by house owners
+- **flats**: Individual flats within buildings
+- **tenants**: Tenant information and assignments
+- **bill_categories**: Categorized bill types
+- **bills**: Individual bills with payment tracking
+
+## ⚙️ Configuration
+
+### 1. Build Assets
+
+```bash
+# Build CSS and JS assets
+npm run build
+
+# For development to build and watch for changes,
+npm run dev
+```
+
+### 2. Start the Application
+
+```bash
+# Start Laravel development server
+php artisan serve
+
+# Start queue worker (for email processing)
+php artisan queue:work
+```
+
+### 3. Access the Application
+
+- **URL**: http://localhost:8000
+- **Default Admin**: admin@flatmanager.com / password
+- **Default House Owner**: abdullah.mamun@example.com / password
+
+## 🏗 Multi-Tenant Architecture
+
+### Implementation Approach
+
+The system uses **column-based tenancy** with the following key components:
+
+#### 1. Tenant Isolation
+- Each house owner has their own `house_owner_id`
+- Global scopes automatically filter data based on authenticated user
+- Middleware provides additional security layers
+
+#### 2. Data Scoping
+
+```php
+// Automatic scoping in models
+protected static function booted()
+{
+    static::addGlobalScope(new HouseOwnerScope);
+}
+
+// Middleware validation
+public function handle(Request $request, Closure $next)
+{
+    if (!$this->validateTenantAccess($request)) {
+        abort(403, 'Access denied');
+    }
+    return $next($request);
+}
+```
+
+#### 3. Admin Override
+- Admins can bypass tenant restrictions
+- Complete system management capabilities
+- Cross-tenant data access for administration
+
+### Security Features
+
+- **Query-level filtering**: All database queries automatically scoped
+- **Middleware protection**: Route-level tenant validation
+- **Model-based isolation**: Eloquent models enforce data separation
+- **Admin privileges**: Super admin can manage all tenants
+
+## 👥 User Roles & Permissions
+
+### Admin (Super Admin)
+- ✅ Create and manage House Owners
+- ✅ Create and assign Tenants to buildings
+- ✅ View all tenant details across buildings
+- ✅ Remove tenants from any building
+- ✅ System-wide analytics and reporting
+- ✅ Access all buildings, flats, and bills
+
+### House Owner
+- ✅ Create and manage flats in their building
+- ✅ Manage flat details (number, owner info)
+- ✅ Create bill categories (Electricity, Gas, Water, Utility)
+- ✅ Generate bills for flats
+- ✅ Track payment status and due amounts
+- ✅ Receive email notifications for bill events
+- ❌ Cannot access other house owners' data
+
+### Tenant (View-only)
+- ✅ View assigned flat details
+- ✅ View personal bill history
+- ✅ Receive bill creation notifications
+- ❌ Cannot modify any data
+
+## 📧 Email Notifications
+
+### Automated Notifications
+
+The system sends automated emails for:
+
+1. **Bill Creation**
+   - Sent to: Tenant and House Owner
+   - Contains: Bill details, amount, due date, payment instructions
+
+2. **Bill Payment**
+   - Sent to: House Owner and Admin
+   - Contains: Payment confirmation, amount paid, date
+
+### Email Configuration
+
+```php
+// Mail classes
+App\Mail\BillCreatedMail  - New bill notification
+App\Mail\BillPaidMail     - Payment confirmation
+
+// Queue processing
+php artisan queue:work    - Process email queue
+```
+
+### Template Features
+
+- **Professional HTML templates** with responsive design
+- **Bill details** including property and tenant information
+- **Payment instructions** and due date reminders
+- **Branding** with system logo and colors
+
+## 🧪 Testing
+
+### Run Tests
+
+```bash
+# Run all tests
+php artisan test
+
+# Run specific test suites
+php artisan test --testsuite=Feature
+php artisan test --testsuite=Unit
+
+# Generate coverage report
+php artisan test --coverage
+```
+
+### Test Coverage
+
+- **Unit Tests**: Model relationships and business logic
+- **Feature Tests**: HTTP endpoints and authentication
+- **Browser Tests**: End-to-end user workflows
+- **Email Tests**: Notification delivery verification
+
+## 🎯 Performance Optimizations
+
+### Database Optimizations
+- **Proper indexing** on frequently queried columns
+- **Eager loading** to prevent N+1 query problems
+- **Query scoping** for efficient data filtering
+- **Connection pooling** for high-traffic scenarios
+
+### Application Optimizations
+- **Service-Repository pattern** for clean code architecture
+- **Caching** for frequently accessed data
+- **Queue processing** for email notifications
+- **Asset optimization** with Vite
+
+### Example Optimized Query
+
+```php
+// Optimized bill retrieval with relationships
+$bills = Bill::with(['flat', 'tenant', 'billCategory'])
+    ->forCurrentTenant()
+    ->whereMonth('created_at', now()->month)
+    ->orderBy('due_date', 'asc')
+    ->paginate(15);
+```
+
+## 🏢 Multi-Tenant Design Decisions
+
+### 1. Column-based vs Schema-based
+- **Choice**: Column-based tenancy
+- **Reason**: Simpler deployment, shared infrastructure, easier maintenance
+- **Trade-off**: Requires careful query scoping vs complete isolation
+
+### 2. Global Scopes vs Manual Filtering
+- **Choice**: Global scopes with middleware backup
+- **Reason**: Automatic protection, reduces developer error
+- **Trade-off**: Less flexibility vs better security
+
+### 3. Admin Access Pattern
+- **Choice**: Conditional scope bypassing
+- **Reason**: Administrative needs while maintaining security
+- **Implementation**: Role-based scope disabling
+
+## 📁 Project Structure
+
+```
+flat-bill-management/
+├── app/
+│   ├── Contracts/          # Repository interfaces
+│   ├── Http/
+│   │   ├── Controllers/    # Request handling
+│   │   ├── Middleware/     # Tenant isolation
+│   │   └── Requests/       # Form validation
+│   ├── Mail/               # Email templates
+│   ├── Models/             # Eloquent models
+│   ├── Repositories/       # Data access layer
+│   └── Services/           # Business logic
+├── database/
+│   ├── migrations/         # Database schema
+│   └── seeders/           # Sample data
+├── resources/
+│   ├── views/             # Blade templates
+│   └── js/                # Frontend assets
+└── tests/                 # Test suites
+```
+
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+**Built with ❤️ using Laravel & Tailwind CSS**

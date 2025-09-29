@@ -17,3 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+# Project documentation and setup files
+SETUP.md
+IMPLEMENTATION_STATUS.md
